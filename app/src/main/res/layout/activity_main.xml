@@ -52,7 +52,7 @@
             app:seekBarRotation="CW270" /> <!-- Rotation: CW90 or CW270 -->
     </com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBarWrapper>
 
-    <ImageButton
+    <Button
         android:id="@+id/imageButton"
         android:layout_width="76dp"
         android:layout_height="77dp"
@@ -67,6 +67,12 @@
         android:layout_marginBottom="8dp"
         app:layout_constraintHorizontal_bias="0.503"
         android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"/>
+        android:layout_marginEnd="8dp" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Menu" />
 
 </android.support.constraint.ConstraintLayout>
