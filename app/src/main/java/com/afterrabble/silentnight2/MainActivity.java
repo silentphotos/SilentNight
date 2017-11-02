@@ -1,6 +1,7 @@
 package com.afterrabble.silentnight2;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.camera2.CameraAccessException;
@@ -13,7 +14,6 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -22,13 +22,14 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.SeekBar;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements SurfaceHolder.Callback, Handler.Callback {
+public class MainActivity extends Activity implements SurfaceHolder.Callback, Handler.Callback {
     private Button mCameraButton;
     long lastDown;
     long lastDuration;
@@ -49,9 +50,13 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     boolean mIsCameraConfigured = false;
     private Surface mCameraSurface = null;
 
+    private SeekBar mHorizSlider;
+    private SeekBar mVertSlider;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
 
@@ -105,6 +110,57 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
                 return true;
             }
         });
+
+
+        mHorizSlider = (SeekBar) findViewById(R.id.h_seekbar);
+        mHorizSlider.setAlpha((float) 0.25);
+        mHorizSlider.setOnSeekBarChangeListener(
+                new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+                        mHorizSlider.setAlpha(1);
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+                        mHorizSlider.setAlpha((float) 0.25);
+                        Toast.makeText(getApplicationContext(), "Frames: " + mHorizSlider.getProgress()/10, Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
+
+        mVertSlider = (SeekBar) findViewById(R.id.v_seekbar);
+        mVertSlider.setAlpha((float) 0.25);
+        mVertSlider.setOnSeekBarChangeListener(
+                new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+                        mVertSlider.setAlpha(1);
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+                        mVertSlider.setAlpha((float) 0.25);
+                        Toast.makeText(getApplicationContext(), "ISO: " + calcISO(mVertSlider.getProgress()), Toast.LENGTH_SHORT).show();
+                    }
+
+                    public String calcISO(int in){
+                        int mapped = (in / 20) + 1;
+                        return ((int)(25 * Math.pow(2, 1 + mapped))) + "";
+                    }
+                }
+        );
     }
 
 
@@ -249,5 +305,4 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             }
         }
     }
-
 }
